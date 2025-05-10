@@ -1,20 +1,21 @@
 import org.skypro.skyshop.basket.ProductBasket;
 import org.skypro.skyshop.product.Product;
+import org.skypro.skyshop.product.SimpleProduct;
+import org.skypro.skyshop.product.DiscountedProduct;
 
 public class App {
     public static void main(String[] args) {
-        Product product = new Product("Название продукта", 0);
-        ProductBasket basket = new ProductBasket();
-        basket.addProduct(product);
+        SimpleProduct product = new SimpleProduct("Название продукта", 0);
+        SimpleProduct pear = new SimpleProduct("Груша", 100);
+        DiscountedProduct grape = new DiscountedProduct("Виноград", 190, 10);
+        SimpleProduct mango = new SimpleProduct("Манго", 300);
+        SimpleProduct apple = new SimpleProduct("Яблоко", 80);
+        SimpleProduct strawberry = new SimpleProduct("Клубника", 250);
+        SimpleProduct cucumber = new SimpleProduct("Огурец", 160);
 
         Product[] productsBasket;
-
-        Product pear = new Product("Груша", 100);
-        Product grape = new Product("Виноград", 190);
-        Product mango = new Product("Манго", 300);
-        Product apple = new Product("Яблоко", 80);
-        Product strawberry = new Product("Клубника", 250);
-        Product cucumber = new Product("Огурец", 160);
+        ProductBasket basket = new ProductBasket();
+        basket.addProduct(product);
 
         //добавление продукта в корзину
         System.out.println("1. Добавление продукта в корзину");
@@ -39,7 +40,7 @@ public class App {
 
         // получение стоимости корзины с несколькими товарами
         System.out.println("4. Получение стоимости корзины с несколькими товарами:");
-        System.out.println("Общая стоимость корзины: " + basket.getTotalPrice());
+        System.out.println("Итого: " + basket.getTotalPrice());
         System.out.println();
 
         //поиск товара в корзине
@@ -64,7 +65,7 @@ public class App {
 
         //получение стоимости пустой корзины
         System.out.println("9. Получение стоимости пустой корзины:");
-        System.out.println("Общая стоимость корзины: " + basket.getTotalPrice());
+        System.out.println("Итого: " + basket.getTotalPrice());
         System.out.println();
 
         // поиск товара по имени в пустой корзине
