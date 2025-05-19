@@ -1,4 +1,7 @@
 import org.skypro.skyshop.basket.ProductBasket;
+import org.skypro.skyshop.info.Article;
+import org.skypro.skyshop.info.SearchEngine;
+import org.skypro.skyshop.info.Searchable;
 import org.skypro.skyshop.product.Product;
 import org.skypro.skyshop.product.SimpleProduct;
 import org.skypro.skyshop.product.DiscountedProduct;
@@ -12,6 +15,36 @@ public class App {
         SimpleProduct apple = new SimpleProduct("Яблоко", 80);
         SimpleProduct strawberry = new SimpleProduct("Клубника", 250);
         SimpleProduct cucumber = new SimpleProduct("Огурец", 160);
+
+        // статьи
+        Article article = new Article("Как понять, что манго сладкое?", "Лучшие манго этого сезона");
+        Article article1 = new Article("Груша - чем полезна?", "Одна груша - доктор не нужен");
+
+        // поисковой движок
+        SearchEngine searchEngine = new SearchEngine(10);
+
+        // продукты для поиска
+        searchEngine.add(product);
+        searchEngine.add(pear);
+        searchEngine.add(grape);
+        searchEngine.add(mango);
+        searchEngine.add(apple);
+        searchEngine.add(strawberry);
+        searchEngine.add(cucumber);
+        searchEngine.add(article);
+        searchEngine.add(article1);
+
+        // проверка поиска
+        String searchRequest = "Манго";
+        Searchable[] searchResults = searchEngine.search(searchRequest);
+
+        // вывод
+        System.out.println("Результаты поиска: " + searchRequest);
+        for (Searchable result : searchResults) {
+            if (result != null) {
+                System.out.println(result.getStringRepresentation());
+            }
+        }
 
         Product[] productsBasket;
         ProductBasket basket = new ProductBasket();
