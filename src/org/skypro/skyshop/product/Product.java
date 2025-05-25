@@ -2,12 +2,17 @@ package org.skypro.skyshop.product;
 
 import org.skypro.skyshop.info.Searchable;
 
+import javax.lang.model.element.Name;
+
 public abstract class Product implements Searchable {
     private final String name;
     public static final String PRODUCT = "PRODUCT";
 
 
     public Product(String name) {
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("Нет имени продукта ");
+        }
         this.name = name;
     }
 
@@ -34,7 +39,9 @@ public abstract class Product implements Searchable {
     @Override
 
     public abstract String toString();
+
 }
+
 
 
 

@@ -5,16 +5,24 @@ import org.skypro.skyshop.info.Searchable;
 import org.skypro.skyshop.product.Product;
 import org.skypro.skyshop.product.SimpleProduct;
 import org.skypro.skyshop.product.DiscountedProduct;
+import org.skypro.skyshop.info.BestResultNotFoundException;
 
 public class App {
     public static void main(String[] args) {
-        SimpleProduct product = new SimpleProduct("Название продукта", 0);
+        SimpleProduct product = new SimpleProduct("Название продукта", 1);
         SimpleProduct pear = new SimpleProduct("Груша", 100);
         DiscountedProduct grape = new DiscountedProduct("Виноград", 190, 10);
         SimpleProduct mango = new SimpleProduct("Манго", 300);
         SimpleProduct apple = new SimpleProduct("Яблоко", 80);
         SimpleProduct strawberry = new SimpleProduct("Клубника", 250);
         SimpleProduct cucumber = new SimpleProduct("Огурец", 160);
+        SimpleProduct fish = null;
+        try {
+            fish = new SimpleProduct(" ", 0);
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
+
 
         // статьи
         Article article = new Article("Как понять, что манго сладкое?", "Лучшие манго этого сезона");
@@ -34,17 +42,24 @@ public class App {
         searchEngine.add(article);
         searchEngine.add(article1);
 
-        // проверка поиска
-        String searchRequest = "Манго";
-        Searchable[] searchResults = searchEngine.search(searchRequest);
-
-        // вывод
-        System.out.println("Результаты поиска: " + searchRequest);
-        for (Searchable result : searchResults) {
-            if (result != null) {
-                System.out.println(result.getStringRepresentation());
-            }
+        // существующий продукт
+        String searchQuery1 = "виноград";
+        try {
+            Searchable bestResult = searchEngine.searchWord(searchQuery1);
+            System.out.println("Лучший результат для запроса " + searchQuery1 + ": " + bestResult.getStringRepresentation());
+        } catch (BestResultNotFoundException e) {
+            System.out.println("Ничего не найдено " + e.getMessage());
         }
+
+        // не существующий продукт
+        String searchQuery2 = "облако";
+        try {
+            Searchable bestResult = searchEngine.searchWord(searchQuery2);
+            System.out.println("Лучший результат для запроса " + searchQuery1 + " " + bestResult.getStringRepresentation());
+        } catch (BestResultNotFoundException e) {
+            System.out.println("Ничего не найдено! " + e.getMessage());
+        }
+
 
         Product[] productsBasket;
         ProductBasket basket = new ProductBasket();
@@ -53,7 +68,7 @@ public class App {
         //добавление продукта в корзину
         System.out.println("1. Добавление продукта в корзину");
         basket.addProduct(pear);
-        basket.addProduct(grape);
+        basket.addProduct(fish);
         basket.addProduct(mango);
         basket.printBasket();
         System.out.println();

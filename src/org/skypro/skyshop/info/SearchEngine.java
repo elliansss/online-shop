@@ -27,11 +27,51 @@ public class SearchEngine {
                 resultsIndex++;
                 if (resultsIndex == 5) {
                     break;
+                }
             }
         }
-    }
-        return results;
-}
 
+        return results;
+    }
+
+
+    public Searchable searchWord(String term) throws BestResultNotFoundException {
+        if (size == 0) {
+            throw new BestResultNotFoundException(term);
+        }
+
+        Searchable bestResult = null;
+        int maxScore = 0;
+
+        for (int i = 0; i < size; i++) {
+            if (searchables[i] == null) {
+                continue;
+            }
+            String str = searchables[i].getSearchTerm().toLowerCase();
+            String subStr = term.toLowerCase();
+            int score = resultMax(str, subStr);
+
+            if (score > maxScore) {
+                maxScore = score;
+                bestResult = searchables[i];
+            }
+        }
+
+        if (bestResult == null) {
+            throw new BestResultNotFoundException(term);
+        }
+
+        return bestResult;
+    }
+
+    private int resultMax(String str, String subStr) {
+        int score = 0;
+        int index = 0;
+        while ((index = str.indexOf(subStr, index)) != -1) {
+            score++;
+            index = index + subStr.length();
+        }
+        return score;
+    }
 }
 
