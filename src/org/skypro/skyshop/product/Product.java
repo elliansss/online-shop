@@ -2,11 +2,10 @@ package org.skypro.skyshop.product;
 
 import org.skypro.skyshop.info.Searchable;
 
-import javax.lang.model.element.Name;
-
 public abstract class Product implements Searchable {
     private final String name;
     public static final String PRODUCT = "PRODUCT";
+    public boolean isSpecial;
 
 
     public Product(String name) {
@@ -14,6 +13,11 @@ public abstract class Product implements Searchable {
             throw new IllegalArgumentException("Нет имени продукта ");
         }
         this.name = name;
+        this.isSpecial = isSpecial;
+    }
+
+    public Product(String name, String name1) {
+        this.name = name1;
     }
 
     public String getName() {

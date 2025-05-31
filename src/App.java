@@ -7,8 +7,11 @@ import org.skypro.skyshop.product.SimpleProduct;
 import org.skypro.skyshop.product.DiscountedProduct;
 import org.skypro.skyshop.info.BestResultNotFoundException;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class App {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws BestResultNotFoundException {
         SimpleProduct product = new SimpleProduct("Название продукта", 1);
         SimpleProduct pear = new SimpleProduct("Груша", 100);
         DiscountedProduct grape = new DiscountedProduct("Виноград", 190, 10);
@@ -23,42 +26,57 @@ public class App {
             System.out.println(e.getMessage());
         }
 
+        ProductBasket productList = new ProductBasket();
+        productList.addProduct(product);
+        productList.addProduct(pear);
+        productList.addProduct(grape);
+        productList.addProduct(mango);
+        productList.addProduct(apple);
+        productList.addProduct(strawberry);
+        productList.addProduct(cucumber);
+        if (fish != null) {
+            productList.addProduct(fish);
+        }
+
+        productList.printBasket();
+
+        // удаление существующего продукта
+        List<Product> removed = productList.removeProductByName("Клубника");
+        System.out.println("Удалено продуктов: " + removed);
+        productList.printBasket();
+
+        // удаление несуществующего продукта
+        List<Product> removedNonExistent = productList.removeProductByName("Апельсин");
+        System.out.println("Удалено продуктов (Апельсин): " + removedNonExistent);
+        if (removedNonExistent.isEmpty()) {
+            System.out.println("Список пуст");
+        }
+        productList.printBasket();
+        productList.clearBasket();
+        System.out.println("Корзина очищена.");
+        productList.printBasket();
+
+
+        int totalPrice = productList.getTotalPrice();
+        System.out.println("Общая стоимость: " + totalPrice);
 
         // статьи
         Article article = new Article("Как понять, что манго сладкое?", "Лучшие манго этого сезона");
         Article article1 = new Article("Груша - чем полезна?", "Одна груша - доктор не нужен");
 
-        // поисковой движок
-        SearchEngine searchEngine = new SearchEngine(10);
-
         // продукты для поиска
-        searchEngine.add(product);
-        searchEngine.add(pear);
-        searchEngine.add(grape);
-        searchEngine.add(mango);
-        searchEngine.add(apple);
-        searchEngine.add(strawberry);
-        searchEngine.add(cucumber);
-        searchEngine.add(article);
-        searchEngine.add(article1);
+        List<Product> allProducts = new ArrayList<>();
+        allProducts.add(product);
+        allProducts.add(pear);
+        allProducts.add(grape);
+        allProducts.add(mango);
+        allProducts.add(apple);
+        allProducts.add(strawberry);
+        allProducts.add(cucumber);
 
-        // существующий продукт
-        String searchQuery1 = "виноград";
-        try {
-            Searchable bestResult = searchEngine.searchWord(searchQuery1);
-            System.out.println("Лучший результат для запроса " + searchQuery1 + ": " + bestResult.getStringRepresentation());
-        } catch (BestResultNotFoundException e) {
-            System.out.println("Ничего не найдено " + e.getMessage());
-        }
-
-        // не существующий продукт
-        String searchQuery2 = "облако";
-        try {
-            Searchable bestResult = searchEngine.searchWord(searchQuery2);
-            System.out.println("Лучший результат для запроса " + searchQuery1 + " " + bestResult.getStringRepresentation());
-        } catch (BestResultNotFoundException e) {
-            System.out.println("Ничего не найдено! " + e.getMessage());
-        }
+        SearchEngine searchEngine = new SearchEngine(allProducts);
+        List<Product> searchResults = (List<Product>) searchEngine.searchWord("манго");
+        System.out.println("Результаты поиска (манго): " + searchResults);
 
 
         Product[] productsBasket;

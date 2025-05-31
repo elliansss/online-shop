@@ -1,33 +1,27 @@
 package org.skypro.skyshop.info;
 
-public class SearchEngine {
-    private final Searchable[] searchables;
-    private int size = 0;
+import org.skypro.skyshop.product.Product;
 
-    public SearchEngine(int capacity) {
-        this.searchables = new Searchable[capacity];
+import java.util.ArrayList;
+import java.util.List;
+
+public class SearchEngine {
+    private final List<Searchable> searchables;
+
+    public SearchEngine(List<Product> capacity) {
+        this.searchables = new ArrayList<>();
     }
 
     public void add(Searchable searchable) {
-        if (size < searchables.length) {
-            searchables[size] = searchable;
-            size++;
-        } else {
-            System.out.println("Нет места");
+        searchables.add(searchable);
         }
-    }
 
-    public Searchable[] search(String query) {
-        Searchable[] results = new Searchable[5];
-        int resultsIndex = 0;
+    public List<Searchable> search(String query) {
+        List<Searchable> results = new ArrayList<>();
 
-        for (int i = 0; i < size; i++) {
-            if (searchables[i].getSearchTerm().toLowerCase().contains(query.toLowerCase())) {
-                results[resultsIndex] = searchables[i];
-                resultsIndex++;
-                if (resultsIndex == 5) {
-                    break;
-                }
+        for (Searchable searchable : searchables) {
+            if (searchable.getSearchTerm().toLowerCase().contains(query.toLowerCase())) {
+                results.add(searchable);
             }
         }
 
@@ -36,24 +30,24 @@ public class SearchEngine {
 
 
     public Searchable searchWord(String term) throws BestResultNotFoundException {
-        if (size == 0) {
+        if (searchables.isEmpty()) {
             throw new BestResultNotFoundException(term);
         }
 
         Searchable bestResult = null;
         int maxScore = 0;
 
-        for (int i = 0; i < size; i++) {
-            if (searchables[i] == null) {
+        for (Searchable searchable : searchables) {
+            if (searchable == null) {
                 continue;
             }
-            String str = searchables[i].getSearchTerm().toLowerCase();
+            String str = searchable.getSearchTerm().toLowerCase();
             String subStr = term.toLowerCase();
             int score = resultMax(str, subStr);
 
             if (score > maxScore) {
                 maxScore = score;
-                bestResult = searchables[i];
+                bestResult = searchable;
             }
         }
 
@@ -72,6 +66,9 @@ public class SearchEngine {
             index = index + subStr.length();
         }
         return score;
+    }
+    public interface Searchable {
+        String getSearchTerm();
     }
 }
 
