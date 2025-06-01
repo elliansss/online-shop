@@ -2,53 +2,84 @@ package org.skypro.skyshop.basket;
 
 import org.skypro.skyshop.product.Product;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
 public class ProductBasket {
 
-    private Product[] productsBasket = new Product[5];
-    private int size = 0;
+    private final LinkedList<Product> products = new LinkedList<>();
+    private int counter = 0;
 
     public void addProduct(Product product) {
-        if (size < productsBasket.length) {
-            productsBasket[size] = product;
-            size++;
-        } else {
-            System.out.println("Невозможно добавить продукт " + product.getNameOfTheProduct());
-        }
+        products.add(product);
+        counter++;
     }
+
 
     public int getTotalPrice() {
         int cost = 0;
-        for (int i = 0; i < size; i++) {
-            cost = cost + productsBasket[i].getPriceOfTheProduct();
+        for (Product product : products) {
+            if (product != null) {
+                cost += product.getPrice();
+            }
         }
         return cost;
     }
 
+
     public void printBasket() {
-        if (size == 0) {
+        if (products.isEmpty()) {
             System.out.println("Корзина пуста.");
             return;
         }
 
         System.out.println("Содержимое корзины:");
-        for (int i = 0; i < size; i++) {
-            System.out.println(productsBasket[i]);
+        int specialCount = 0;
+        for (Product product : products) {
+            if (product != null) {
+                System.out.println(product.getName() + " " + product.getPrice() + " " + "рублей");
+                if (product.isSpecial()) {
+                    specialCount++;
+                }
+            } else {
+                System.out.println("Продукта нет!");
+            }
+
         }
+
+        System.out.println("Итого: " + getTotalPrice());
+        System.out.println("Специальных товаров: " + specialCount);
     }
 
     public boolean containsProduct(String productName) {
-        for (int i = 0; i < size; i++) {
-            if (productsBasket[i].getNameOfTheProduct().equals(productName)) {
+        for (Product product : products) {
+            if (product != null && product.getName().equals(productName)) {
                 return true;
             }
         }
         return false;
     }
 
+
     public void clearBasket() {
-        for (int i = 0; i < productsBasket.length; i++) {
-            productsBasket[i] = null;
+        products.clear();
+    }
+
+    public List<Product> removeProductByName(String name) {
+        List<Product> removedProducts = new ArrayList<>();
+        Iterator<Product> iterator = products.iterator();
+        while (iterator.hasNext()) {
+            Product product = iterator.next();
+            if (product.getName().equals(name)) {
+                removedProducts.add(product);
+                iterator.remove();
+                counter--;
+            }
         }
-        size = 0;
+        return removedProducts;
     }
 }
+
+
