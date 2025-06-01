@@ -66,16 +66,11 @@ public class App {
 
         // продукты для поиска
         List<Product> allProducts = new ArrayList<>();
-        allProducts.add(product);
-        allProducts.add(pear);
-        allProducts.add(grape);
-        allProducts.add(mango);
-        allProducts.add(apple);
-        allProducts.add(strawberry);
-        allProducts.add(cucumber);
-
         SearchEngine searchEngine = new SearchEngine(allProducts);
-        List<Product> searchResults = (List<Product>) searchEngine.searchWord("манго");
+        searchEngine.add(pear);
+        searchEngine.add(grape);
+        searchEngine.add(mango);
+        Searchable searchResults = searchEngine.searchWord("манго");
         System.out.println("Результаты поиска (манго): " + searchResults);
 
 

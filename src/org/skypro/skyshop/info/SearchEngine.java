@@ -6,13 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SearchEngine {
-    private final List<Searchable> searchables;
+    private final List<Product> searchables;
 
     public SearchEngine(List<Product> capacity) {
-        this.searchables = new ArrayList<>();
+        this.searchables = capacity;
     }
 
-    public void add(Searchable searchable) {
+    public void add(Product searchable) {
         searchables.add(searchable);
         }
 
@@ -66,9 +66,6 @@ public class SearchEngine {
             index = index + subStr.length();
         }
         return score;
-    }
-    public interface Searchable {
-        String getSearchTerm();
     }
 }
 
