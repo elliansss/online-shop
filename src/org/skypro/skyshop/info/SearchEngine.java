@@ -4,6 +4,8 @@ import org.skypro.skyshop.product.Product;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class SearchEngine {
     private final List<Product> searchables;
@@ -66,6 +68,14 @@ public class SearchEngine {
             index = index + subStr.length();
         }
         return score;
+    }
+    public Map<String, Searchable> search2(String query) {
+        List<Searchable> results = search(query);
+        Map<String, Searchable> resultMap = new TreeMap<>();
+        for (Searchable searchable : results) {
+            resultMap.put(searchable.getSearchTerm(), searchable);
+        }
+        return resultMap;
     }
 }
 

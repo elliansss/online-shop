@@ -9,6 +9,7 @@ import org.skypro.skyshop.info.BestResultNotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class App {
     public static void main(String[] args) throws BestResultNotFoundException {
@@ -37,28 +38,35 @@ public class App {
         if (fish != null) {
             productList.addProduct(fish);
         }
-
+        System.out.println();
         productList.printBasket();
 
         // удаление существующего продукта
         List<Product> removed = productList.removeProductByName("Клубника");
         System.out.println("Удалено продуктов: " + removed);
+        System.out.println();
         productList.printBasket();
+        System.out.println();
 
         // удаление несуществующего продукта
         List<Product> removedNonExistent = productList.removeProductByName("Апельсин");
         System.out.println("Удалено продуктов (Апельсин): " + removedNonExistent);
+        System.out.println();
         if (removedNonExistent.isEmpty()) {
             System.out.println("Список пуст");
+            System.out.println();
         }
+
         productList.printBasket();
         productList.clearBasket();
         System.out.println("Корзина очищена.");
         productList.printBasket();
+        System.out.println();
 
 
         int totalPrice = productList.getTotalPrice();
         System.out.println("Общая стоимость: " + totalPrice);
+        System.out.println();
 
         // статьи
         Article article = new Article("Как понять, что манго сладкое?", "Лучшие манго этого сезона");
@@ -70,8 +78,13 @@ public class App {
         searchEngine.add(pear);
         searchEngine.add(grape);
         searchEngine.add(mango);
-        Searchable searchResults = searchEngine.searchWord("манго");
-        System.out.println("Результаты поиска (манго): " + searchResults);
+        Map<String, Searchable> searchResults = searchEngine.search2("манго");
+
+        System.out.println("Результаты поиска (манго): ");
+        for (Map.Entry<String, Searchable> entry : searchResults.entrySet()) {
+            System.out.println(entry.getKey() + ": " + entry.getValue());
+        }
+        System.out.println();
 
 
         Product[] productsBasket;
