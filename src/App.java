@@ -1,25 +1,100 @@
 import org.skypro.skyshop.basket.ProductBasket;
+import org.skypro.skyshop.info.Article;
+import org.skypro.skyshop.info.SearchEngine;
+import org.skypro.skyshop.info.Searchable;
 import org.skypro.skyshop.product.Product;
+import org.skypro.skyshop.product.SimpleProduct;
+import org.skypro.skyshop.product.DiscountedProduct;
+import org.skypro.skyshop.info.BestResultNotFoundException;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class App {
-    public static void main(String[] args) {
-        Product product = new Product("Название продукта", 0);
-        ProductBasket basket = new ProductBasket();
-        basket.addProduct(product);
+    public static void main(String[] args) throws BestResultNotFoundException {
+        SimpleProduct product = new SimpleProduct("Название продукта", 1);
+        SimpleProduct pear = new SimpleProduct("Груша", 100);
+        DiscountedProduct grape = new DiscountedProduct("Виноград", 190, 10);
+        SimpleProduct mango = new SimpleProduct("Манго", 300);
+        SimpleProduct apple = new SimpleProduct("Яблоко", 80);
+        SimpleProduct strawberry = new SimpleProduct("Клубника", 250);
+        SimpleProduct cucumber = new SimpleProduct("Огурец", 160);
+        SimpleProduct fish = null;
+        try {
+            fish = new SimpleProduct(" ", 0);
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
+
+        ProductBasket productList = new ProductBasket();
+        productList.addProduct(product);
+        productList.addProduct(pear);
+        productList.addProduct(grape);
+        productList.addProduct(mango);
+        productList.addProduct(apple);
+        productList.addProduct(strawberry);
+        productList.addProduct(cucumber);
+        if (fish != null) {
+            productList.addProduct(fish);
+        }
+        System.out.println();
+        productList.printBasket();
+
+        // удаление существующего продукта
+        List<Product> removed = productList.removeProductByName("Клубника");
+        System.out.println("Удалено продуктов: " + removed);
+        System.out.println();
+        productList.printBasket();
+        System.out.println();
+
+        // удаление несуществующего продукта
+        List<Product> removedNonExistent = productList.removeProductByName("Апельсин");
+        System.out.println("Удалено продуктов (Апельсин): " + removedNonExistent);
+        System.out.println();
+        if (removedNonExistent.isEmpty()) {
+            System.out.println("Список пуст");
+            System.out.println();
+        }
+
+        productList.printBasket();
+        productList.clearBasket();
+        System.out.println("Корзина очищена.");
+        productList.printBasket();
+        System.out.println();
+
+
+        int totalPrice = productList.getTotalPrice();
+        System.out.println("Общая стоимость: " + totalPrice);
+        System.out.println();
+
+        // статьи
+        Article article = new Article("Как понять, что манго сладкое?", "Лучшие манго этого сезона");
+        Article article1 = new Article("Груша - чем полезна?", "Одна груша - доктор не нужен");
+
+        // продукты для поиска
+        List<Product> allProducts = new ArrayList<>();
+        SearchEngine searchEngine = new SearchEngine(allProducts);
+        searchEngine.add(pear);
+        searchEngine.add(grape);
+        searchEngine.add(mango);
+        Map<String, Searchable> searchResults = searchEngine.search2("манго");
+
+        System.out.println("Результаты поиска (манго): ");
+        for (Map.Entry<String, Searchable> entry : searchResults.entrySet()) {
+            System.out.println(entry.getKey() + ": " + entry.getValue());
+        }
+        System.out.println();
+
 
         Product[] productsBasket;
-
-        Product pear = new Product("Груша", 100);
-        Product grape = new Product("Виноград", 190);
-        Product mango = new Product("Манго", 300);
-        Product apple = new Product("Яблоко", 80);
-        Product strawberry = new Product("Клубника", 250);
-        Product cucumber = new Product("Огурец", 160);
+        ProductBasket basket = new ProductBasket();
+        basket.addProduct(product);
 
         //добавление продукта в корзину
         System.out.println("1. Добавление продукта в корзину");
         basket.addProduct(pear);
-        basket.addProduct(grape);
+        basket.addProduct(fish);
         basket.addProduct(mango);
         basket.printBasket();
         System.out.println();
@@ -39,7 +114,7 @@ public class App {
 
         // получение стоимости корзины с несколькими товарами
         System.out.println("4. Получение стоимости корзины с несколькими товарами:");
-        System.out.println("Общая стоимость корзины: " + basket.getTotalPrice());
+        System.out.println("Итого: " + basket.getTotalPrice());
         System.out.println();
 
         //поиск товара в корзине
@@ -64,7 +139,7 @@ public class App {
 
         //получение стоимости пустой корзины
         System.out.println("9. Получение стоимости пустой корзины:");
-        System.out.println("Общая стоимость корзины: " + basket.getTotalPrice());
+        System.out.println("Итого: " + basket.getTotalPrice());
         System.out.println();
 
         // поиск товара по имени в пустой корзине
