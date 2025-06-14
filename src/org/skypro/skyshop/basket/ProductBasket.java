@@ -10,19 +10,19 @@ public class ProductBasket {
 
     public void addProduct(Product product) {
 
-            if (product == null) {
-                return;
-            }
-
-            List<Product> products;
-            if (!productMap.containsKey(product.getName())) {
-                products = new LinkedList<>();
-                productMap.put(product.getName(), products);
-            } else {
-                products = productMap.get(product.getName());
-            }
-            products.add(product);
+        if (product == null) {
+            return;
         }
+
+        List<Product> products;
+        if (!productMap.containsKey(product.getName())) {
+            products = new LinkedList<>();
+            productMap.put(product.getName(), products);
+        } else {
+            products = productMap.get(product.getName());
+        }
+        products.add(product);
+    }
 
     public int getTotalPrice() {
         int cost = 0;
@@ -81,16 +81,9 @@ public class ProductBasket {
     }
 
     public List<Product> removeProductByName(String name) {
-        List<Product> removedProducts = new ArrayList<>();
-        for (List<Product> products : productMap.values()) {
-            Iterator<Product> iterator = products.iterator();
-            while (iterator.hasNext()) {
-                Product product = iterator.next();
-                if (product.getName().equals(name)) {
-                    removedProducts.add(product);
-                    iterator.remove();
-                }
-            }
+        List<Product> removedProducts = productMap.remove(name);
+        if (removedProducts == null) {
+            return Collections.emptyList();
         }
         return removedProducts;
     }
