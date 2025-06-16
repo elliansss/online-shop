@@ -2,32 +2,30 @@ package org.skypro.skyshop.info;
 
 import org.skypro.skyshop.product.Product;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 public class SearchEngine {
-    private final List<Product> searchables;
+    private Set<Searchable> searchables = new HashSet<>();
 
-    public SearchEngine(List<Product> capacity) {
-        this.searchables = capacity;
+    public SearchEngine(Set<Searchable> capacity) {
+        this.searchables = Objects.requireNonNull(capacity, "Значение не может быть null");
     }
 
-    public void add(Product searchable) {
+    public void add(Searchable searchable) {
         searchables.add(searchable);
-        }
+    }
 
-    public List<Searchable> search(String query) {
-        List<Searchable> results = new ArrayList<>();
-
+    public Set<Searchable> search(String query) {
+        Set<Searchable> results = new TreeSet<>(new SearchableComparator());
         for (Searchable searchable : searchables) {
-            if (searchable.getSearchTerm().toLowerCase().contains(query.toLowerCase())) {
+            if (searchable != null &&
+                    searchable.getSearchTerm() != null &&
+                    searchable.getSearchTerm().toLowerCase().contains(query.toLowerCase())) {
                 results.add(searchable);
             }
         }
-
         return results;
+
     }
 
 
@@ -69,9 +67,10 @@ public class SearchEngine {
         }
         return score;
     }
-    public Map<String, Searchable> search2(String query) {
-        List<Searchable> results = search(query);
-        Map<String, Searchable> resultMap = new TreeMap<>();
+
+    public TreeMap<String, Searchable> search2(String query) {
+        Set<Searchable> results = search(query);
+        TreeMap<String, Searchable> resultMap = new TreeMap<>();
         for (Searchable searchable : results) {
             resultMap.put(searchable.getSearchTerm(), searchable);
         }

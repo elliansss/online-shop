@@ -6,50 +6,39 @@ import java.util.*;
 
 public class ProductBasket {
 
-    private final Map<String, List<Product>> productMap = new TreeMap<>();
+    Set<Product> products = new TreeSet<>();
 
     public void addProduct(Product product) {
-
         if (product == null) {
             return;
-        }
-
-        List<Product> products;
-        if (!productMap.containsKey(product.getName())) {
-            products = new LinkedList<>();
-            productMap.put(product.getName(), products);
-        } else {
-            products = productMap.get(product.getName());
         }
         products.add(product);
     }
 
+
     public int getTotalPrice() {
         int cost = 0;
-        for (List<Product> products : productMap.values()) {
-            for (Product product : products) {
-                if (product != null) {
-                    cost += product.getPrice();
-                }
+        for (Product product : products) {
+            if (product != null) {
+                cost += product.getPrice();
             }
         }
         return cost;
     }
 
     public void printBasket() {
-        List<Product> allProducts = new ArrayList<>();
-        for (List<Product> products : productMap.values()) {
-            allProducts.addAll(products);
+        for (Product product : products) {
+            System.out.println(product);
         }
 
-        if (allProducts.isEmpty()) {
+        if (products.isEmpty()) {
             System.out.println("Корзина пуста.");
             return;
         }
 
         System.out.println("Содержимое корзины:");
         int specialCount = 0;
-        for (Product product : allProducts) {
+        for (Product product : products) {
             if (product != null) {
                 System.out.println(product.getName() + " " + product.getPrice() + " " + "рублей");
                 if (product.isSpecial()) {
@@ -66,22 +55,20 @@ public class ProductBasket {
     }
 
     public boolean containsProduct(String productName) {
-        for (List<Product> products : productMap.values()) {
-            for (Product product : products) {
-                if (product.getName().equals(productName)) {
-                    return true;
-                }
+        for (Product product : products) {
+            if (product != null && product.getName().equals(productName)) {
+                return true;
             }
         }
         return false;
     }
 
     public void clearBasket() {
-        productMap.clear();
+        products.clear();
     }
 
     public List<Product> removeProductByName(String name) {
-        List<Product> removedProducts = productMap.remove(name);
+        List<Product> removedProducts = new ArrayList<>();
         if (removedProducts == null) {
             return Collections.emptyList();
         }

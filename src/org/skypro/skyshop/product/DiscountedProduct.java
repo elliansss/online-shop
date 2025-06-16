@@ -1,6 +1,6 @@
 package org.skypro.skyshop.product;
 
-public class DiscountedProduct extends Product {
+public class DiscountedProduct extends Product implements Comparable<Product> {
     private final int basicPrice;
     private final int wholeSalePercentage;
 
