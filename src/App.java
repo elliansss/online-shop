@@ -81,7 +81,7 @@ public class App {
 
         Set<Searchable> allProductsSet = new HashSet<>(allProductsList);
         SearchEngine searchEngine = new SearchEngine(allProductsSet);
-        TreeMap<String, Searchable> searchResults = searchEngine.search2("манго");
+        Map<String, Searchable> searchResults = searchEngine.search2("манго");
 
         System.out.println("Результаты поиска (манго): ");
         for (Map.Entry<String, Searchable> entry : searchResults.entrySet()) {
